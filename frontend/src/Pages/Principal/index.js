@@ -23,7 +23,6 @@ const Page = () => {
                                 <Link to="/princ">Pedidos</Link>
                             </div>
                         </label>
-
                         <label className="area">
                             <div className="area-input">
                                 <Link to="/" disabled={disabled}>Configurações   </Link>
