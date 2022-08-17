@@ -12,11 +12,11 @@ import UpdateProduct from "./Pages/updateProduct";
 import UpdateCategory from "./Pages/updateCategory";
 import UpdateIngredient from "./Pages/updateIngredient";
 import UpdateUser from "./Pages/updateUser";
-
 import AddIngredient from "./Pages/Ingredient/AddIngredient";
 import AddCategory from "./Pages/Categoria/AddCategory";
 import AddFormasPagamento from "./Pages/addFormasPagamentos";
 import UpdateFormasPagamento from "./Pages/updateFormasPagamentos";
+import Principal from "./Pages/Principal";
 
 import { Private } from "./components/Private";
 
@@ -26,6 +26,7 @@ export default () => {
             <Route path="/" element={<Home />} />
 
             <Route path="/login" element={<Login />} />
+
             <Route path="/signup" element={<Private component={SignUp} />} />
 
             <Route path="/product/:id" element={<ProductPage />} />
@@ -72,6 +73,12 @@ export default () => {
                 path="/formaspagamento/update"
                 element={<Private component={UpdateFormasPagamento} />}
             />
+
+            <Route
+                path="/principal"
+                element={<Private component={Principal} />}
+            />
+
 
             <Route path="/*" element={<NotFound />} />
         </Routes>

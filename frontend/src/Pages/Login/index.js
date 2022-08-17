@@ -27,7 +27,7 @@ const Page = () => {
             } else setError(json.error);
         } else {
             doLogin(json.token, rememberPassword);
-            window.location.href = "/";
+            window.location.href = "/principal";
         }
         setDisabled(false);
     };

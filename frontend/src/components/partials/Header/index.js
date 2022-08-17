@@ -17,7 +17,7 @@ const Header = (props) => {
 
     // render header only if pathname is not login;
 
-    if (location.pathname !== "/login")
+    if (location.pathname !== "/login" && location.pathname !== "/principal" )
         return (
             <HeaderArea>
                 <div className="container">
