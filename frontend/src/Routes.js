@@ -17,6 +17,7 @@ import AddCategory from "./Pages/Categoria/AddCategory";
 import AddFormasPagamento from "./Pages/addFormasPagamentos";
 import UpdateFormasPagamento from "./Pages/updateFormasPagamentos";
 import Principal from "./Pages/Principal";
+import AddPedido from "./Pages/Pedidos/add";
 
 import { Private } from "./components/Private";
 
@@ -79,6 +80,10 @@ export default () => {
                 element={<Private component={Principal} />}
             />
 
+            <Route 
+                path="/pedido/add"
+                element={<Private component={AddPedido}/>}
+            />
 
             <Route path="/*" element={<NotFound />} />
         </Routes>
