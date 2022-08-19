@@ -25,7 +25,7 @@ export const PageArea = styled.div`
             margin-top: 20px;
             .area {
                 padding: 10px 0px 10px 45px;
-                width: 400px;
+                width: 95%;
             }
 
             .selecao {
@@ -77,6 +77,21 @@ export const PageArea = styled.div`
             input::placeholder {
                 font-style: italic;
                 font-weight: 200;
+            }
+        }
+
+        .teste{
+            display: flex;
+            justify-content: space-evenly;
+            .right{
+                width: 47.5%;
+                height: 100px;
+            }
+            .left{
+                background-color: #ffff;
+                display: block;
+                width: 47.5%;
+                height: 100px;
             }
         }
     }

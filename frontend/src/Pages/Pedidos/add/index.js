@@ -6,6 +6,7 @@ import { PageArea } from "./styled";
 import { ErrorMessage } from "../../../components/mainComponents";
 
 const Page = () => {
+
     const api = useApi();
 
     const [name, setName] = useState("");
@@ -45,28 +46,32 @@ const Page = () => {
                     <form onSubmit={handleSubmit}>
                         
                     <div className="area mesa">
-                            <label>
-                                <h3>Número da mesa:</h3>
-                                <input
-                                    autoFocus
-                                    type="text"
-                                    disabled={disabled}
-                                    value={name}
-                                    onChange={(e) => setName(e.target.value)}
-                                />
-                            </label>
+                            <h3>Número da mesa:</h3>
+                            <input
+                                autoFocus
+                                type="text"
+                                disabled={disabled}
+                                value={name}
+                                onChange={(e) => setName(e.target.value)}
+                            />
                         </div>
 
-                        <div className="area bebida">
-                            <label>
-                                <h3>Bebidas:</h3>
-                                <div className="selecao">
-                                    dsfasdfasdfasdvadvasd
-
+                        <div className="teste">
+                            <div className="left produtos">
+                                <h3>Pedidos</h3>
+                                <div className="search">
+                                        <img src="lupa.png"/>
+                                        <input type="search"/>
                                 </div>
-                            </label>
-                        </div>
+                                <h4>Lista de Pedidos</h4>
+                                <div className="lista-pedidos">
+                                    <p>Pastel</p>
+                                </div>
+                            </div>
+                            <div className="right">
 
+                            </div>
+                        </div>
 
                         <div className="area">
                             <button>cadastrar</button>

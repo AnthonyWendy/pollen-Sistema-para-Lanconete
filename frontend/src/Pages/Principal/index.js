@@ -20,7 +20,7 @@ const Page = () => {
                     <div className="form">
                         <label className="area">
                             <div className="area-input">
-                                <Link to="/princ">Pedidos</Link>
+                                <Link to="/principal">Pedidos</Link>
                             </div>
                         </label>
                         <label className="area">
