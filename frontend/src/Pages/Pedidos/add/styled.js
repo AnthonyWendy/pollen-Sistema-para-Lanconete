@@ -23,8 +23,9 @@ export const PageArea = styled.div`
         form {
             display: block;
             margin-top: 20px;
+
             .area {
-                padding: 10px 0px 10px 45px;
+                padding: 10px 0px 10px 20px;
                 width: 95%;
             }
 
@@ -86,12 +87,27 @@ export const PageArea = styled.div`
             .right{
                 width: 47.5%;
                 height: 100px;
+                background-color: red ;
             }
             .left{
-                background-color: #ffff;
+                /* background-color: #ffff; */
                 display: block;
                 width: 47.5%;
-                height: 100px;
+                height: 300px;
+
+                border: 1px solid #fb0043;
+
+                h3{
+                    padding: 0px 0px 0px 10px;
+                }
+
+                .search {
+                    padding: 10px 20px 0px 20px;
+                }
+
+                input{
+                    width: 100%     ;
+                }
             }
         }
     }

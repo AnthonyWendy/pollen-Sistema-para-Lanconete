@@ -36,7 +36,6 @@ const Page = () => {
         const getIngredient = async () => {
             const ingre = await api.getIngredients();
             setIngredients(ingre.ingredientes);
-            console.log(ingre.ingredientes);
         }
         getIngredient();
     }, []);
