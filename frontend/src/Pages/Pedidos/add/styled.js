@@ -96,19 +96,60 @@ export const PageArea = styled.div`
                 height: 300px;
 
                 border: 1px solid #fb0043;
-
+                
+                overflow: hidden;
                 h3{
                     padding: 0px 0px 0px 10px;
                 }
-
+                
                 .search {
                     padding: 10px 20px 0px 20px;
                 }
-
+                
                 input{
                     width: 100%     ;
                 }
             }
+            
+            ul{
+                margin-top: 10px;
+                height: 200px;
+                overflow-y: scroll;
+            }
+
+            ul::-webkit-scrollbar{
+                background: #fb0043;
+                width: 5px;
+                border-radius: 6px;
+            }
+
+            ul{
+                background: #f5f5f5;
+                li{
+                    background: #242424;
+                    
+                    list-style-type: none;
+                    font-size: 16px;
+
+                    border-radius: 4px;
+                    margin: 0px 10px 0px 0px;
+                    height: 28px;
+
+                    .adicionarProduct {
+
+                        border-radius: 4px;
+                        height: 20px;
+                        width: 120px;
+
+                        font-size: 0px;
+                    }
+                }
+            }
+            
+
+
+            
+
         }
     }
 `;

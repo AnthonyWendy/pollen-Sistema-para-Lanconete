@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "perfect-scrollbar": "^1.5.5",
+    "react-perfect-scrollbar": "^1.5.8"
+  }
+}

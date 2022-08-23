@@ -1,6 +1,7 @@
 import React, { useMemo, useEffect, useState, useRef } from "react";
 
 import useApi from "../../../helpers/api";
+import 'react-perfect-scrollbar/dist/css/styles.css';
 
 import { PageArea } from "./styled";
 import { ErrorMessage } from "../../../components/mainComponents";
@@ -14,23 +15,39 @@ const Page = () => {
     const [busca, setBusca] = useState("");
     const [disabled, setDisabled] = useState(false);
     const [error, setError] = useState("");
+    const [ID, setID] = useState("");
     
     const [produtos, setProdutos] = useState([]);
     const [garcons, setGarcons] = useState([]);
 
 
     useEffect(() => {
-        const getListGarcom = async () => {
-            const nomes = await api.getUsers();
-            setGarcons(nomes);
+        const getGarcons = async () => {
+            const json = await api.getUsers();
+            if(!json.error){
+                setGarcons(json);
+            }
         }
-        getListGarcom();
+        getGarcons();
     }, []);
-
+    
+    useEffect(() => {
+        for(const cat of garcons){
+            if(cat._id == ID){
+                setGarcom(cat);
+                break;
+            }
+        }
+    });
+    
+    
     useEffect(() => {
         const getProduto = async () => {
-            const product = await api.getProducts();
-            setProdutos(product);
+            const json = await api.getProducts();
+            if(!json.error){
+                setProdutos(json.products);
+                console.log(json.products);
+            }
         };
         getProduto();
     }, []);
@@ -65,31 +82,32 @@ const Page = () => {
                     <h2>Cadastro da comanda</h2>
                     <form onSubmit={handleSubmit}>
                         
-                    <div className="area mesa">
-                        <h3>Número da mesa:</h3>
-                        <input
-                            autoFocus
-                            type="text"
-                            disabled={disabled}
-                            value={mesa}
-                            onChange={(e) => setMesa(e.target.value)}
-                        />
-                    </div>
-                    <div className="area nome-garcom">
-                        {/* <h3>Garçom:</h3>
-                        <select onChange={(e) => setID(e.target.value)}>
-                                <option value="">Selecione</option>
-                                {gacons.map((user) => (
-                                    <option
-                                        key={ingredient.id_ingrediente}
-                                        value={ingredient.id_ingrediente}
-                                    >
-                                        {ingredient.nm_ingrediente}
-                                    </option>
-                                ))}
-                            </select> */}
-                    </div>
-
+                        <div className="teste">
+                            <div className="area mesa">
+                                <h3>Número da mesa:</h3>
+                                <input
+                                    autoFocus
+                                    type="text"
+                                    disabled={disabled}
+                                    value={mesa}
+                                    onChange={(e) => setMesa(e.target.value)}
+                                />
+                            </div>
+                            <div className="area nome-garcom">
+                                <h3>Garçom:</h3>
+                                <select onChange={(e) => setID(e.target.value)}>
+                                        <option value="">Selecione</option>
+                                        {garcons.map((garcom) => (
+                                            <option
+                                                key={garcom.id_garcom}
+                                                value={garcom.id_garcom}
+                                            >
+                                                {garcom.name}
+                                            </option>
+                                        ))}
+                                    </select>
+                            </div>
+                        </div>
                         <div className="teste">
                             <div className="left produtos">
                                 <h3>Produtos</h3>
@@ -101,9 +119,19 @@ const Page = () => {
                                             onChange={e => setBusca(e.target.value)}
                                         />
 
-                                        <div className="listProdutos">
-                                          
-                                        </div>
+                                        <ul>
+                                            {produtos.map((product) => (
+                                                <li
+                                                    key={product.id_produto}
+                                                    value={product.id_produto}
+                                                >
+                                                    <h3>{product.nm_produto}</h3>
+                                                    {/* <button className="adicionarProduct">Adicionar</button> */}
+                                                </li>
+                                            )
+                                                
+                                            )}
+                                        </ul>
 
                                 </div>
                                 
