@@ -12,14 +12,18 @@ const Page = () => {
 
     const [mesa, setMesa] = useState("");
     const [garcom, setGarcom] = useState("");
-    const [busca, setBusca] = useState("");
     const [disabled, setDisabled] = useState(false);
     const [error, setError] = useState("");
     const [ID, setID] = useState("");
+    const [busca, setBusca] = useState([]);
+    const [price, setPrice] = useState(0);
     
+    const [tomate, setTomate] = useState([]);
     const [produtos, setProdutos] = useState([]);
     const [garcons, setGarcons] = useState([]);
 
+    
+    
 
     useEffect(() => {
         const getGarcons = async () => {
@@ -46,7 +50,6 @@ const Page = () => {
             const json = await api.getProducts();
             if(!json.error){
                 setProdutos(json.products);
-                console.log(json.products);
             }
         };
         getProduto();
@@ -125,21 +128,41 @@ const Page = () => {
                                                     key={product.id_produto}
                                                     value={product.id_produto}
                                                 >
-                                                    <h3>{product.nm_produto}</h3>
-                                                    {/* <button className="adicionarProduct">Adicionar</button> */}
+                                                    <label>
+                                                        {product.nm_produto} 
+                                                        <button type="button"
+                                                                onClick={() => {
+                                                                    setTomate([...tomate, product])
+                                                                    setPrice(price+parseFloat(product.valor))
+                                                                }}
+                                                        >Adicionar</button>
+                                                    </label>
+                                                    <hr/>
                                                 </li>
-                                            )
-                                                
-                                            )}
+                                            ))}
                                         </ul>
-
-                                </div>
-                                
+                                </div>                                
                             </div>
                             <div className="right">
-                                <h4>Lista de Pedidos</h4>
+                                <h3>Lista de Pedidos</h3>
                                     <div className="lista-pedidos">
-                                        <p>Pastel</p>
+                                        <ul>
+                                            {tomate.map((product) => (
+                                                <li
+                                                    key={product.id_produto}
+                                                    value={product.id_produto}
+                                                >
+                                                    <label>
+                                                        {product.nm_produto} 
+                                                        <h3>R$ {product.valor}</h3>
+                                                    </label>
+                                                    <hr/>
+                                                </li>
+                                            ))}
+                                        </ul>
+                                    <div className="price">
+                                        <label>Valor total: <h3>{price}</h3></label>
+                                    </div>
                                     </div>
                             </div>
                         </div>

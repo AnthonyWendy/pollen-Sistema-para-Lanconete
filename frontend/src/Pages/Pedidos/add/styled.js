@@ -84,11 +84,42 @@ export const PageArea = styled.div`
         .teste{
             display: flex;
             justify-content: space-evenly;
+            
             .right{
                 width: 47.5%;
-                height: 100px;
-                background-color: red ;
+                height: 300px;
+                border: 1px solid #fb0043;
+                
+                overflow: hidden;
+
+                h3{
+                    padding: 0px 0px 0px 10px;
+                }
+                
+                .lista-pedidos {
+                    padding: 0px 0px 0px 20px;
+                    font-size: 15px;
+                }
+
+                ul{
+                    height: 200px;
+                }
+
+                .price {
+                    label{
+                        align-items: center;
+                        font-size: 20px;
+                        padding-right: 50px;
+                        justify-content: flex-end;
+                        display: inline-flex;
+                        width: 100%;    
+
+                    }
+                    
+                    
+                }
             }
+
             .left{
                 /* background-color: #ffff; */
                 display: block;
@@ -109,14 +140,14 @@ export const PageArea = styled.div`
                 input{
                     width: 100%     ;
                 }
+
+                button {
+                    height: 24px;
+                    width: 100px;
+                    font-size: 14px;
+                }
             }
             
-            ul{
-                margin-top: 10px;
-                height: 200px;
-                overflow-y: scroll;
-            }
-
             ul::-webkit-scrollbar{
                 background: #fb0043;
                 width: 5px;
@@ -124,16 +155,30 @@ export const PageArea = styled.div`
             }
 
             ul{
-                background: #f5f5f5;
+                margin-top: 10px;
+                height: 200px;
+                overflow-y: scroll;
+                
                 li{
                     background: #242424;
-                    
+
                     list-style-type: none;
                     font-size: 16px;
 
                     border-radius: 4px;
-                    margin: 0px 10px 0px 0px;
+                    margin: 0px 10px 10px 0px;
                     height: 28px;
+                    
+                    
+                    label{
+                        display: flex;
+                        justify-content: space-between;
+                    }
+                    
+                    hr {
+                        border-color: #fb0043;
+                    }
+
 
                     .adicionarProduct {
 
