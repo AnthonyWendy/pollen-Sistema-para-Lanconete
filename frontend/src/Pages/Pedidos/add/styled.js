@@ -102,7 +102,7 @@ export const PageArea = styled.div`
                 }
 
                 ul{
-                    height: 200px;
+                    height: 230px;
                 }
 
                 .price {

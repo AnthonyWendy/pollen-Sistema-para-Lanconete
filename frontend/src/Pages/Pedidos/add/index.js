@@ -47,9 +47,11 @@ const Page = () => {
     
     useEffect(() => {
         const getProduto = async () => {
-            const json = await api.getProducts();
+            const json = await api.getProducts({limit: 0});
+
             if(!json.error){
                 setProdutos(json.products);
+                console.log(json.products)
             }
         };
         getProduto();
@@ -160,9 +162,9 @@ const Page = () => {
                                                 </li>
                                             ))}
                                         </ul>
+                                    </div>
                                     <div className="price">
                                         <label>Valor total: <h3>{price}</h3></label>
-                                    </div>
                                     </div>
                             </div>
                         </div>

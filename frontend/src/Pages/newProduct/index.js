@@ -86,8 +86,7 @@ const Page = () => {
         const json = await api.addProduct(fData);
 
         if (!json.error) {
-            // navigate(`/ad/${json.id}`);
-            navigate("/");
+            navigate(`/ad/${json.id_produto}`);
             return;
         } else {
             setError(json.error);
