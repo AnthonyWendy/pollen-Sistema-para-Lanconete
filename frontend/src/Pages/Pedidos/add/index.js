@@ -6,7 +6,11 @@ import 'react-perfect-scrollbar/dist/css/styles.css';
 import { PageArea } from "./styled";
 import { ErrorMessage } from "../../../components/mainComponents";
 
+let timer;
+
 const Page = () => {
+
+
 
     const api = useApi();
 
@@ -15,15 +19,18 @@ const Page = () => {
     const [disabled, setDisabled] = useState(false);
     const [error, setError] = useState("");
     const [ID, setID] = useState("");
-    const [busca, setBusca] = useState([]);
     const [price, setPrice] = useState(0);
+    const [q, setQ] = useState("");
     
-    const [tomate, setTomate] = useState([]);
+    const [listProducts, setListProducts] = useState([]);
     const [produtos, setProdutos] = useState([]);
     const [garcons, setGarcons] = useState([]);
 
-    
-    
+    const priceFormatter = new Intl.NumberFormat("en-US", {
+        style: "currency",
+        currency: "BRL",
+        minimumIntegerDigits: "2",
+    });
 
     useEffect(() => {
         const getGarcons = async () => {
@@ -44,18 +51,23 @@ const Page = () => {
         }
     });
     
-    
     useEffect(() => {
         const getProduto = async () => {
-            const json = await api.getProducts({limit: 0});
+
+            const json = await api.getProducts({limit: 0, q});
 
             if(!json.error){
                 setProdutos(json.products);
-                console.log(json.products)
             }
         };
-        getProduto();
-    }, []);
+
+        if(timer){
+            clearTimeout(timer);
+        }
+        timer = setTimeout(getProduto, 500)
+
+
+    }, [q]);
 
 
     const handleSubmit = async (e) => {
@@ -63,21 +75,23 @@ const Page = () => {
         setDisabled(true);
         setError("");
 
+        let errors = [];
+
         if (!mesa.trim()) {
-            setError("Nome é obrigatório");
-            console.log(error);
-            setDisabled(false);
-            return;
+            errors.push("Informe o número da mesa!");
+        }
+        if(!ID.trim()){
+            errors.push("Informe o nome do garçom!");
         }
 
 
-        // if (!json.error) {
-        //     window.location.reload();
-        // } else {
-        //     setError(json.error);
-        // }
+        if(errors.length === 0){
+            const comanda = {mesa, ID, listProducts};
 
-        setDisabled(false);
+            console.log(comanda);
+
+            const json = await api.addComanda(comanda);
+        }
     };
 
     return (
@@ -96,18 +110,18 @@ const Page = () => {
                                     disabled={disabled}
                                     value={mesa}
                                     onChange={(e) => setMesa(e.target.value)}
-                                />
+                                    />
                             </div>
                             <div className="area nome-garcom">
                                 <h3>Garçom:</h3>
                                 <select onChange={(e) => setID(e.target.value)}>
                                         <option value="">Selecione</option>
-                                        {garcons.map((garcom) => (
+                                        {garcons.map((garcom1) => (
                                             <option
-                                                key={garcom.id_garcom}
-                                                value={garcom.id_garcom}
+                                            key={garcom1.id_garcom}
+                                            value={garcom1.id_garcom}
                                             >
-                                                {garcom.name}
+                                                {garcom1.name}
                                             </option>
                                         ))}
                                     </select>
@@ -120,9 +134,9 @@ const Page = () => {
                                         {/* <img src="lupa.png"/> */}
                                         <input 
                                             type="text"
-                                            value={busca}
-                                            onChange={e => setBusca(e.target.value)}
-                                        />
+                                            value={q}
+                                            onChange={e => setQ(e.target.value)}
+                                            />
 
                                         <ul>
                                             {produtos.map((product) => (
@@ -134,8 +148,9 @@ const Page = () => {
                                                         {product.nm_produto} 
                                                         <button type="button"
                                                                 onClick={() => {
-                                                                    setTomate([...tomate, product])
+                                                                    setListProducts([...listProducts, product])
                                                                     setPrice(price+parseFloat(product.valor))
+                                                                    setQ("")
                                                                 }}
                                                         >Adicionar</button>
                                                     </label>
@@ -149,7 +164,7 @@ const Page = () => {
                                 <h3>Lista de Pedidos</h3>
                                     <div className="lista-pedidos">
                                         <ul>
-                                            {tomate.map((product) => (
+                                            {listProducts.map((product) => (
                                                 <li
                                                     key={product.id_produto}
                                                     value={product.id_produto}
@@ -164,7 +179,7 @@ const Page = () => {
                                         </ul>
                                     </div>
                                     <div className="price">
-                                        <label>Valor total: <h3>{price}</h3></label>
+                                        <label>Valor total: <h3>{priceFormatter.format(price)}</h3></label>
                                     </div>
                             </div>
                         </div>
