@@ -81,7 +81,7 @@ export default () => {
             />
 
             <Route 
-                path="/pedido/add"
+                path="/comanda/add"
                 element={<Private component={AddPedido}/>}
             />
 

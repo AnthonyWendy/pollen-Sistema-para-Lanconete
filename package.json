@@ -1,6 +1,7 @@
 {
   "dependencies": {
     "perfect-scrollbar": "^1.5.5",
-    "react-perfect-scrollbar": "^1.5.8"
+    "react-perfect-scrollbar": "^1.5.8",
+    "uuid": "^8.3.2"
   }
 }

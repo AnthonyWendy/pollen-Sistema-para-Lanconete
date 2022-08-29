@@ -140,6 +140,9 @@ const API = {
         return json;
     },
 
+    addComanda: async (body) => {
+        const json = await apiFetchPost("/comanda/add", body);
+    },
     addProduct: async (fData) => {
         const json = await apiFetchFile("/product/add", fData);
         return json;

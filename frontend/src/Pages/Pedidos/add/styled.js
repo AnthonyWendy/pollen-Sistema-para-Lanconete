@@ -103,6 +103,16 @@ export const PageArea = styled.div`
 
                 ul{
                     height: 230px;
+
+                    label {
+                        display: flex;
+                        justify-content: space-between;
+                    }
+                    button {
+                    height: 24px;
+                    width: 100px;
+                    font-size: 14px;
+                }
                 }
 
                 .price {
