@@ -18,6 +18,8 @@ import AddFormasPagamento from "./Pages/addFormasPagamentos";
 import UpdateFormasPagamento from "./Pages/updateFormasPagamentos";
 import Principal from "./Pages/Principal";
 import AddPedido from "./Pages/Pedidos/add";
+import UpdatePedido from "./Pages/Pedidos/Update";
+import ListComandas from "./Pages/PedidoPage";
 
 import { Private } from "./components/Private";
 
@@ -83,6 +85,16 @@ export default () => {
             <Route 
                 path="/comanda/add"
                 element={<Private component={AddPedido}/>}
+            />
+
+            <Route 
+                path="/comanda/update"
+                element={<Private component={UpdatePedido}/>}
+            />
+
+            <Route 
+                path="/comanda/list"
+                element={<Private component={ListComandas}/>}
             />
 
             <Route path="/*" element={<NotFound />} />
