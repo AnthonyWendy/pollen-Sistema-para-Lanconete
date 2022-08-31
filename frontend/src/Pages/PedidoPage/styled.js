@@ -50,7 +50,9 @@ export const PageArea = styled.div`
 
     .list-items{
       width: 80%;
-
+      max-height: 500px;
+      margin: 0px 10px 5px 0px;;
+      
       small {
         display: flex;
         justify-content: space-between;
@@ -59,34 +61,64 @@ export const PageArea = styled.div`
       
       ul{
         font-size: 18px;
-        padding: 0px 0px 0px 50px;
+        margin: 0px 10px 0px 50px;
+        height: 100%;
         overflow-y: scroll;
         
         
         li {
           list-style-type: none;
+
+          hr{
+            height: 1px;
+            margin: 5px 2px 5px 0px;
+            border-color: #fb0043;
+          }
         }
       }
   
       ul::-webkit-scrollbar{
         background: #fb0043;
-        width: 5px;
+        width: 3px;
         border-radius: 6px;
       }
     }
 
     .footer {
       width: 100%;
-      position: relative;
+      display: flex;
+      justify-content: center;
+
+      margin: 10px 0px;
 
       h3 {
         left: 0;
       }
       
     }
-    
-
   
+    button {
+      width: 350px;
+      height: 25px;
+
+      text-align: center;
+      font-family: "Inter", sans-serif;
+      font-weight: 800;
+      font-size: 20px;
+      color: #fb0043;
+
+      background: #242424;
+      border-width: 1px 2px 2px 1px;
+      border-style: solid;
+      border-color: #0d0d0d;;
+
+      cursor: pointer;
+
+      &:hover {
+          border-width: 0px 2px 2px 0px;
+          border-color: #fb0043;
+      }
+    }
 
   }
 `;

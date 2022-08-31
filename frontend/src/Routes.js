@@ -88,7 +88,7 @@ export default () => {
             />
 
             <Route 
-                path="/comanda/update"
+                path="/comanda/update/:id"
                 element={<Private component={UpdatePedido}/>}
             />
 

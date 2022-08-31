@@ -99,7 +99,7 @@ const Page = () => {
 
             const json = await api.addComanda(comanda);
             
-            // window.location.reload()
+            window.location.reload()
         }
     };
 
@@ -115,7 +115,7 @@ const Page = () => {
                                 <h3>Número da mesa:</h3>
                                 <input
                                     autoFocus
-                                    type="text"
+                                    type="number"
                                     disabled={disabled}
                                     value={mesa}
                                     onChange={(e) => setMesa(e.target.value)}

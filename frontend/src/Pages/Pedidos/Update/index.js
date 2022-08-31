@@ -1,31 +1,36 @@
 import React, { useMemo, useEffect, useState, useRef } from "react";
-
+import { useParams } from "react-router-dom";
 import useApi from "../../../helpers/api";
 import 'react-perfect-scrollbar/dist/css/styles.css';
-import { v4 as uuidv4 } from 'uuid';
 
 import { PageArea } from "./styled";
 import { ErrorMessage } from "../../../components/mainComponents";
 
 let timer;
 let cont = 0;
+let contP = 0;
+let sir = 0;
 
 const Page = () => {
 
-
+    const situacoes = ["Finalizada","Atendido", "Esperando", "Recolher pedidos"];
     
     const api = useApi();
 
-    
-    const [mesa, setMesa] = useState("");
-    const [garcom, setGarcom] = useState("");
+    const { id } = useParams();
+    const [comanda, setComanda] = useState({});
+
     const [disabled, setDisabled] = useState(false);
     const [error, setError] = useState("");
     const [ID, setID] = useState("");
     const [price, setPrice] = useState(0);
+    const [sit, setSit] = useState("");
     const [q, setQ] = useState("");
     
-    const [listProducts, setListProducts] = useState([]);
+    const [listProducts, setListProducts] = useState([]);//vai receber os pedidos da comanda e os novos pedidos
+
+    const [listProducts1, setListProducts1] = useState([]);//vai receber os novos pedidos
+
     const [produtos, setProdutos] = useState([]);
     const [garcons, setGarcons] = useState([]);
 
@@ -35,25 +40,19 @@ const Page = () => {
         minimumIntegerDigits: "2",
     });
 
+
     useEffect(() => {
-        const getGarcons = async () => {
-            const json = await api.getUsers();
+        const getComanda = async () => {
+            const json = await api.getComanda(id);
             if(!json.error){
-                setGarcons(json);
-                console.log(garcons)
+                setComanda(json);
+                setListProducts(json.pedidos);
+                console.log(listProducts);
+                cont = json.pedidos.length;
             }
         }
-        getGarcons();
-    }, []);
-    
-    useEffect(() => {
-        for(const cat of garcons){
-            if(cat._id == ID){
-                setGarcom(cat);
-                break;
-            }
-        }
-    });
+        getComanda();
+    },[]);
     
     useEffect(() => {
         const getProduto = async () => {
@@ -80,9 +79,7 @@ const Page = () => {
 
         let errors = [];
 
-        if (!mesa) {
-            errors.push("Informe o número da mesa!");
-        }
+        
         if(!ID){
             errors.push("Informe o nome do garçom!");
         }
@@ -94,7 +91,7 @@ const Page = () => {
 
 
         if(errors.length === 0){
-            const comanda = {mesa, ID, listProducts, price};
+            const comanda = { ID, listProducts, price};
 
 
             const json = await api.addComanda(comanda);
@@ -107,35 +104,24 @@ const Page = () => {
         <PageArea>
             <div className="container-cadastro">
                 <div className="pad">
-                    <h2>Cadastro da comanda</h2>
+                    <h2>Comanda #{comanda.id_comanda} da mesa {comanda.mesa}, {comanda.User && comanda.User.name}</h2>
                     <form onSubmit={handleSubmit}>
-                        
                         <div className="teste">
-                            <div className="area mesa">
-                                <h3>Número da mesa:</h3>
-                                <input
-                                    autoFocus
-                                    type="text"
-                                    disabled={disabled}
-                                    value={mesa}
-                                    onChange={(e) => setMesa(e.target.value)}
-                                    />
-                            </div>
-                            <div className="area nome-garcom">
-                                <h3>Garçom:</h3>
-                                <select onChange={(e) => setID(e.target.value)}>
+                        <div className="area nome-garcom">
+                                <h3>Situação</h3>
+                                <select onChange={(e) => setSit(e.target.value)}>
                                         <option value="">Selecione</option>
-                                        {garcons.map((garcom1) => (
+                                        {situacoes.map((situacao) => (
                                             <option
-                                                key={garcom1._id}
-                                                value={garcom1._id}
+                                                value={sir++}
                                             >
-                                                {garcom1.name}
+                                                {situacao}
                                             </option>
                                         ))}
                                     </select>
                             </div>
                         </div>
+
                         <div className="teste">
                             <div className="left produtos">
                                 <h3>Produtos</h3>
@@ -146,7 +132,6 @@ const Page = () => {
                                             value={q}
                                             onChange={e => setQ(e.target.value)}
                                             />
-
                                         <ul>
                                             {produtos.map((product) => (
                                                 <li
@@ -154,13 +139,12 @@ const Page = () => {
                                                     value={product.id_produto}
                                                 >
                                                     <label>
-                                                        {product.nm_produto} 
+                                                        {product.Produto ? product.Produto.nm_produto: product.nm_produto} 
                                                         <button type="button"
                                                                 onClick={() => {
-                                                                    setListProducts([...listProducts, {...product, uuid:cont++ }  ])
-                                                                    setPrice(price+parseFloat(product.valor))
+                                                                    setListProducts([...listProducts, {...product, uuid:cont++ }])
+                                                                    setListProducts1([...listProducts1, {...product, uuid:cont++ } ])
                                                                     setQ("")
-                                                                    
                                                                 }}
                                                                 >Adicionar</button>
                                                     </label>
@@ -177,24 +161,23 @@ const Page = () => {
                                             {listProducts.map((product) => (
                                                                                                 
                                                 <li
-                                                    key={product.uuid}
-                                                    value={product.id_produto}
+                                                    key={contP}
                                                 >
                                                     <label>
-                                                        {product.nm_produto} 
-                                                        <h3>R$ {product.valor}</h3>
+                                                        {product.Produto ? product.Produto.nm_produto: product.nm_produto} 
+                                                        <h3>R$ {product.Produto ? product.Produto.valor: product.nm_produto}</h3>
                                                         <button className="retirar"
                                                             type="button"
-                                                            onClick={() => {
-                                                                console.log(listProducts[product.uuid])
+                                                            // onClick={() => {
+                                                            //     console.log(listProducts[product.uuid])
                                                                 
-                                                                setListProducts(listProducts.filter((productf) => {
-                                                                    return productf.uuid != product.uuid
-                                                                }))
+                                                            //     setListProducts(listProducts.filter((productf) => {
+                                                            //         return productf.uuid != product.uuid
+                                                            //     }))
                                                                 
-                                                                setPrice(price-parseFloat(product.valor))
-                                                            }
-                                                            }
+                                                            //     setPrice(price-parseFloat(product.valor))
+                                                            // }
+                                                            // }
                                                             >
                                                             {product.cancelado ? "Cancelado":"Remover"}
                                                         </button>

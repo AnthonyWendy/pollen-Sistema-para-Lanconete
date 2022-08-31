@@ -25,8 +25,8 @@ const Page = () => {
       const json = await api.getComandas();
       
       if(!json.error){
-        console.log(comandas);
         setComandas(json);
+        console.log(comandas);
       }
     }
     getComandas();
@@ -60,16 +60,22 @@ const Page = () => {
                             {priceFormatter.format(pedido.Produto.valor)}</h4></small>
                       
                     </li>
-                    
-                    
-
                   ))}
-                  <li><h3>R$ 10,00</h3>
+                  <li>
+                    <hr></hr>
+                    <small>Valor final: 
+                      <h3>{priceFormatter.format(comanda.valor_final)}</h3>
+                    </small>
                 </li>
                 </ul>
               </div>   
               <div className="footer">
-                <button>Alterar</button>
+                <button
+                  onClick={() => {
+                    window.location.href = `/comanda/update/${comanda.id_comanda}`;
+
+                  }}
+                  >Alterar</button>
               </div>
           </div>
         </>

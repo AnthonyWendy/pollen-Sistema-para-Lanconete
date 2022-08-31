@@ -234,6 +234,11 @@ const API = {
         return json;
     },
 
+    getComanda: async (id) => {
+        const json = await apiFetchGet(`/comanda/${id}`);
+        return json;
+    },
+
     getApi: () => {
         return BASEAPI;
     },
