@@ -29,6 +29,7 @@ const Page = () => {
             return;
         }
 
+        console.log(name)
         const json = await api.addCategory(name);
 
         if (json.error) {
@@ -40,6 +41,8 @@ const Page = () => {
         }
 
         setDisabled(false);
+
+        window.location.reload();
     };
 
     return (

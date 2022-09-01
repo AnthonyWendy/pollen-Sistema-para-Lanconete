@@ -17,7 +17,7 @@ const Header = (props) => {
 
     // render header only if pathname is not login;
 
-    if (location.pathname !== "/login" && location.pathname !== "/principal" )
+    if (location.pathname !== "/login" && location.pathname !== "/principal" && location.pathname !== "/comanda/add" && location.pathname  !== "/comanda/update/:id"  && location.pathname !== "/comanda/list")
         return (
             <HeaderArea>
                 <div className="container">
@@ -100,6 +100,44 @@ const Header = (props) => {
                     </nav>
                 </div>
             </HeaderArea>
-        );
+        ); 
+    else
+    { if (location.pathname !== "/login" && location.pathname !== "/principal" && location.pathname)
+        return (
+        <HeaderArea>
+            <div className="container">
+                <Link to="/" className="title">
+                    <h2>pollen</h2>
+                </Link>
+                <nav>
+                    <ul>
+                        {logged && (
+                            <>
+                                <li>
+                                    <Link to="/comanda/add" >Adicionar comanda</Link>
+                                </li>
+                                <li>
+                                    <Link to="/" >Configurações</Link>
+                                </li>
+                                <li
+                                    className="button"
+                                    onClick={handleLogout}
+                                >
+                                    <span>sair</span>
+                                </li>
+                            </>
+                        )}
+                        {!logged && (
+                            <>
+                                <li className="button">
+                                    <Link to="/login">login</Link>
+                                </li>
+                            </>
+                        )}
+                    </ul>
+                </nav>
+            </div>
+        </HeaderArea>
+    );}
 };
 export default Header;

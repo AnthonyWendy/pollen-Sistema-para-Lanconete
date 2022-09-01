@@ -1,5 +1,5 @@
 import React, { useMemo, useEffect, useState, useRef } from "react";
-
+import createNumberMask from "text-mask-addons/dist/createNumberMask";
 import useApi from "../../../helpers/api";
 import 'react-perfect-scrollbar/dist/css/styles.css';
 import { v4 as uuidv4 } from 'uuid';
@@ -29,10 +29,12 @@ const Page = () => {
     const [produtos, setProdutos] = useState([]);
     const [garcons, setGarcons] = useState([]);
 
-    const priceFormatter = new Intl.NumberFormat("en-US", {
-        style: "currency",
-        currency: "BRL",
-        minimumIntegerDigits: "2",
+    const priceFormatter = createNumberMask({
+        prefix: "R$ ",
+        includeThousandsSeparator: true,
+        thousandsSeparatorSymbol: ".",
+        allowDecimal: true,
+        decimalSymbol: ",",
     });
 
     useEffect(() => {
@@ -83,9 +85,10 @@ const Page = () => {
         if (!mesa) {
             errors.push("Informe o número da mesa!");
         }
-        if(!ID){
+        if(!ID.trim()){
             errors.push("Informe o nome do garçom!");
         }
+        if(!garcom)
         console.log(ID)
 
         if(price){
@@ -98,8 +101,7 @@ const Page = () => {
 
 
             const json = await api.addComanda(comanda);
-            
-            window.location.reload()
+            window.location.reload();
         }
     };
 
@@ -192,9 +194,10 @@ const Page = () => {
                                                                     return productf.uuid != product.uuid
                                                                 }))
                                                                 
-                                                                setPrice(price-parseFloat(product.valor))
+                                                                setPrice(parseFloat(price)-parseFloat(product.valor))
                                                             }
-                                                            }
+                                                        }
+                                    
                                                             >
                                                             {product.cancelado ? "Cancelado":"Remover"}
                                                         </button>
@@ -205,7 +208,7 @@ const Page = () => {
                                         </ul>
                                     </div>
                                     <div className="price">
-                                        <label>Valor total: <h3>{priceFormatter.format(price)}</h3></label>
+                                        <label>Valor total: <h3>{price}</h3></label>
                                     </div>
                             </div>
                         </div>

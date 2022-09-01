@@ -14,6 +14,7 @@ let sir = 0;
 const Page = () => {
 
     const situacoes = ["Finalizada","Atendido", "Esperando", "Recolher pedidos"];
+    const forma = ["Pix", "Débito", "Crédito"];
     
     const api = useApi();
 
@@ -25,6 +26,7 @@ const Page = () => {
     const [pix, setPix] = useState(0);
     const [debito, setDebito] = useState(0);
     const [credito, setCredito] = useState(0);
+    const [pagamento, setPagamento] = useState([]);
 
     const [soma, setSoma] = useState(0);
     const [total, setTotal] = useState(0);
@@ -50,6 +52,7 @@ const Page = () => {
     });
 
 
+    console.log(price, "anthony")
     useEffect(() => {
         const getComanda = async () => {
             const json = await api.getComanda(id);
@@ -88,6 +91,12 @@ const Page = () => {
         console.log(pix+debito+credito - soma)
         // console.log(total, pix, soma, debito, credito);
     }, [pix, debito, credito, soma]);
+
+    useEffect(() => {
+        const pagamentoComanda = async () => {
+            const json = await api.getProduct()
+        }
+    })
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -209,7 +218,9 @@ const Page = () => {
                                                                     }
                                                                     setListProducts(copy);
                                                                 }
-                                                                setPrice(price-parseFloat(product.valor))
+                                                                console.log(product, "valor do produto")
+                                                                setPrice(parseFloat(price)-parseFloat(product.Produto.valor))
+                                                                
                                                             }}
                                                             >
                                                             {product.cancelado ? "Cancelado":"Remover"}
@@ -245,39 +256,44 @@ const Page = () => {
                         </div>
 
                         <div className={final ? "paga":"nao"}>
-                            <label>
-                                <h4>Pix</h4>
-                                <input 
-                                    autoFocus
-                                    type="number"
-                                    value={pix}
-                                    onChange={(e) => setPix(parseFloat(e.target.value))}
-                                />
-                            </label>
-                            <label>
-                                <h4>Crédito</h4>
-                                <input 
-                                    autoFocus
-                                    type="number"
-                                    value={debito}
-                                    onChange={(e) => setDebito(parseFloat(e.target.value))}
-                                />
-                            </label>
-                            <label>
-                                <h4>Crédito</h4>
-                                <input 
-                                    type="number"
-                                    value={credito}
-                                    onChange={(e) => setCredito(parseFloat(e.target.value))}    
-                                />
-                            </label>
-                            <label>
-                                <h4>Valor restante</h4>
-                                <span> {total} </span>
-                            </label>
-                            <label>
-                                <button>Fechar Comanda</button>
-                            </label>
+                                <label>
+                                    <h4>Pix</h4>
+                                    <input 
+                                        autoFocus
+                                        type="number"
+                                        value={pix}
+                                        onChange={(e) => setPix(parseFloat(e.target.value))}
+                                    />
+                                </label>
+                                <label>
+                                    <h4>Crédito</h4>
+                                    <input 
+                                        autoFocus
+                                        type="number"
+                                        value={debito}
+                                        onChange={(e) => setDebito(parseFloat(e.target.value))}
+                                    />
+                                </label>
+                                <label>
+                                    <h4>Crédito</h4>
+                                    <input 
+                                        type="number"
+                                        value={credito}
+                                        onChange={(e) => setCredito(parseFloat(e.target.value))}    
+                                    />
+                                </label>
+                                <label>
+                                    <h4>Valor restante</h4>
+                                    <span> {total} </span>
+                                </label>
+                                <label>
+                                    <button
+                                        onClick={() => {
+                                            setPagamento(...pagamento, {pix, debito, credito })
+                                        }}
+                                    >Fechar Comanda</button>
+                                </label>
+                            
                         </div>
                     </form>
                 </div>

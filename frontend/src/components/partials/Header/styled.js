@@ -43,6 +43,9 @@ export const HeaderArea = styled.div`
             align-items: center;
             justify-content: center;
 
+            margin-left: 20px;
+            margin-right: 20px;
+
             cursor: pointer;
             a,
             span {

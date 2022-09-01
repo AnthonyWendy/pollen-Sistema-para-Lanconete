@@ -20,12 +20,12 @@ const Page = () => {
                     <div className="form">
                         <label className="area">
                             <div className="area-input">
-                                <Link to="/pedidos">Pedidos</Link>
+                                <Link to="/comanda/list" disabled={disabled}>Pedidos</Link>
                             </div>
                         </label>
                         <label className="area">
                             <div className="area-input">
-                                <Link to="/" disabled={disabled}>Configurações   </Link>
+                                <Link to="/" disabled={disabled}>Configurações</Link>
                             </div>
                         </label>
                     </div>
