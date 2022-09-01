@@ -239,6 +239,11 @@ const API = {
         return json;
     },
 
+    updateComanda: async(id, body) => {
+        const json = await apiFetchPut(`/comanda/update/${id}`, body);
+        return json;
+    },
+
     getApi: () => {
         return BASEAPI;
     },

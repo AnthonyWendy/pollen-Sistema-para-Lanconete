@@ -20,6 +20,15 @@ const Page = () => {
     const { id } = useParams();
     const [comanda, setComanda] = useState({});
 
+    const [final, setFinal] = useState(false);
+
+    const [pix, setPix] = useState(0);
+    const [debito, setDebito] = useState(0);
+    const [credito, setCredito] = useState(0);
+
+    const [soma, setSoma] = useState(0);
+    const [total, setTotal] = useState(0);
+
     const [disabled, setDisabled] = useState(false);
     const [error, setError] = useState("");
     const [ID, setID] = useState("");
@@ -28,11 +37,11 @@ const Page = () => {
     const [q, setQ] = useState("");
     
     const [listProducts, setListProducts] = useState([]);//vai receber os pedidos da comanda e os novos pedidos
-
     const [listProducts1, setListProducts1] = useState([]);//vai receber os novos pedidos
 
+    const [remove, setRemove] = useState([]);//vai receber quem vair sair
+
     const [produtos, setProdutos] = useState([]);
-    const [garcons, setGarcons] = useState([]);
 
     const priceFormatter = new Intl.NumberFormat("en-US", {
         style: "currency",
@@ -47,8 +56,10 @@ const Page = () => {
             if(!json.error){
                 setComanda(json);
                 setListProducts(json.pedidos);
-                console.log(listProducts);
+                setPrice(parseFloat(json.valor_final));   
+                setSoma(parseFloat(json.valor_final));   
                 cont = json.pedidos.length;
+                setSit(json.situacao);
             }
         }
         getComanda();
@@ -72,6 +83,12 @@ const Page = () => {
 
     }, [q]);
 
+    useEffect(() => {
+        setTotal((pix+debito+credito)-soma);
+        console.log(pix+debito+credito - soma)
+        // console.log(total, pix, soma, debito, credito);
+    }, [pix, debito, credito, soma]);
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         setDisabled(true);
@@ -79,25 +96,23 @@ const Page = () => {
 
         let errors = [];
 
-        
-        if(!ID){
-            errors.push("Informe o nome do garçom!");
-        }
-        console.log(ID)
 
         if(price){
             price.toString().replace(".", ",");
         }
 
+        const comanda = { 
+                remove,
+                listProducts1,
+                sit,
+                price
+        };
+        console.log(comanda, id);
 
-        if(errors.length === 0){
-            const comanda = { ID, listProducts, price};
+        const json = await api.updateComanda(id, comanda);
+        
+        // window.location.reload()
 
-
-            const json = await api.addComanda(comanda);
-            
-            // window.location.reload()
-        }
     };
 
     return (
@@ -113,6 +128,7 @@ const Page = () => {
                                         <option value="">Selecione</option>
                                         {situacoes.map((situacao) => (
                                             <option
+                                                key={sit}
                                                 value={sir++}
                                             >
                                                 {situacao}
@@ -144,6 +160,7 @@ const Page = () => {
                                                                 onClick={() => {
                                                                     setListProducts([...listProducts, {...product, uuid:cont++ }])
                                                                     setListProducts1([...listProducts1, {...product, uuid:cont++ } ])
+                                                                    setPrice(price+parseFloat(product.valor))
                                                                     setQ("")
                                                                 }}
                                                                 >Adicionar</button>
@@ -165,19 +182,35 @@ const Page = () => {
                                                 >
                                                     <label>
                                                         {product.Produto ? product.Produto.nm_produto: product.nm_produto} 
-                                                        <h3>R$ {product.Produto ? product.Produto.valor: product.nm_produto}</h3>
+                                                        <h3>R$ {product.Produto ? product.Produto.valor: product.valor}</h3>
                                                         <button className="retirar"
                                                             type="button"
-                                                            // onClick={() => {
-                                                            //     console.log(listProducts[product.uuid])
-                                                                
-                                                            //     setListProducts(listProducts.filter((productf) => {
-                                                            //         return productf.uuid != product.uuid
-                                                            //     }))
-                                                                
-                                                            //     setPrice(price-parseFloat(product.valor))
-                                                            // }
-                                                            // }
+                                                            onClick={() => { 
+                                                                const remover = comanda.pedidos.find((product1) => {
+                                                                    return product1.id == product.id;
+                                                                });
+
+                                                                if(remover){
+                                                                    setRemove([...remove, remover ]);
+
+                                                                    const copy = [];
+                                                                    for(let i=0; i <listProducts.length; i++){
+                                                                        if(listProducts[i].id != product.id){
+                                                                            copy.push(listProducts[i]);
+                                                                        }
+                                                                    }
+                                                                    setListProducts(copy);
+                                                                }else {
+                                                                    const copy = [];
+                                                                    for(let i=0; i <listProducts.length; i++){
+                                                                        if(listProducts[i].uuid != product.uuid){
+                                                                            copy.push(listProducts[i]);
+                                                                        }
+                                                                    }
+                                                                    setListProducts(copy);
+                                                                }
+                                                                setPrice(price-parseFloat(product.valor))
+                                                            }}
                                                             >
                                                             {product.cancelado ? "Cancelado":"Remover"}
                                                         </button>
@@ -188,23 +221,63 @@ const Page = () => {
                                         </ul>
                                     </div>
                                     <div className="price">
-                                        <label>Valor total: <h3>{priceFormatter.format(price)}</h3></label>
+                                        <label>Valor total: 
+                                            <h3>{priceFormatter.format(price)}
+                                            </h3>
+                                        </label>
                                     </div>
                             </div>
                         </div>
 
                         <div className="container">
                             <div className="area">
-                                <button>cadastrar</button>
+                                <button>alterar</button>
                             </div>
-
                             <div className="area">
-                                <button className="fim">finalizar</button>
+                                <button
+                                    onClick={() => {
+                                        setFinal(!final);
+                                    }}>finalizar</button>
                             </div>
-                        </div>
-                                                            
+                        </div>                                                            
                         <div className="area">
                             {error && <ErrorMessage>{error}</ErrorMessage>}
+                        </div>
+
+                        <div className={final ? "paga":"nao"}>
+                            <label>
+                                <h4>Pix</h4>
+                                <input 
+                                    autoFocus
+                                    type="number"
+                                    value={pix}
+                                    onChange={(e) => setPix(parseFloat(e.target.value))}
+                                />
+                            </label>
+                            <label>
+                                <h4>Crédito</h4>
+                                <input 
+                                    autoFocus
+                                    type="number"
+                                    value={debito}
+                                    onChange={(e) => setDebito(parseFloat(e.target.value))}
+                                />
+                            </label>
+                            <label>
+                                <h4>Crédito</h4>
+                                <input 
+                                    type="number"
+                                    value={credito}
+                                    onChange={(e) => setCredito(parseFloat(e.target.value))}    
+                                />
+                            </label>
+                            <label>
+                                <h4>Valor restante</h4>
+                                <span> {total} </span>
+                            </label>
+                            <label>
+                                <button>Fechar Comanda</button>
+                            </label>
                         </div>
                     </form>
                 </div>
