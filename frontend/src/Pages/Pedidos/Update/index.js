@@ -23,6 +23,8 @@ const Page = () => {
 
     const [final, setFinal] = useState(false);
 
+    const [fechar, setFechar] = useState(false);
+
     const [pix, setPix] = useState(0);
     const [debito, setDebito] = useState(0);
     const [credito, setCredito] = useState(0);
@@ -51,8 +53,6 @@ const Page = () => {
         minimumIntegerDigits: "2",
     });
 
-
-    console.log(price, "anthony")
     useEffect(() => {
         const getComanda = async () => {
             const json = await api.getComanda(id);
@@ -87,24 +87,22 @@ const Page = () => {
     }, [q]);
 
     useEffect(() => {
-        setTotal((pix+debito+credito)-soma);
-        console.log(pix+debito+credito - soma)
-        // console.log(total, pix, soma, debito, credito);
+        setTotal((pix+debito+credito)-soma);        
     }, [pix, debito, credito, soma]);
 
-    useEffect(() => {
-        const pagamentoComanda = async () => {
-            const json = await api.getProduct()
-        }
-    })
-
-    const handleSubmit = async (e) => {
-        e.preventDefault();
+    const handleSubmit = async () => {
         setDisabled(true);
+        console.log(pagamento, "anthony")
         setError("");
 
         let errors = [];
 
+
+        if(fechar){
+
+            const json = await api.addPagamento(id, {pagamento});
+            alert(...json)
+        }
 
         if(price){
             price.toString().replace(".", ",");
@@ -120,7 +118,7 @@ const Page = () => {
 
         const json = await api.updateComanda(id, comanda);
         
-        // window.location.reload()
+        window.location.href = "/comanda/list"
 
     };
 
@@ -242,12 +240,19 @@ const Page = () => {
 
                         <div className="container">
                             <div className="area">
-                                <button>alterar</button>
+                                <button
+                                onClick= {(() => {
+                                    setFechar(false)    
+                                    handleSubmit()
+                                        })}
+                                >alterar</button>
                             </div>
                             <div className="area">
                                 <button
+                                type="button"
                                     onClick={() => {
                                         setFinal(!final);
+
                                     }}>finalizar</button>
                             </div>
                         </div>                                                            
@@ -289,11 +294,13 @@ const Page = () => {
                                 <label>
                                     <button
                                         onClick={() => {
-                                            setPagamento(...pagamento, {pix, debito, credito })
+                                            setPagamento({pix, debito, credito});
+                                            setFechar(true)
+                                            handleSubmit();
                                         }}
                                     >Fechar Comanda</button>
                                 </label>
-                            
+                        
                         </div>
                     </form>
                 </div>

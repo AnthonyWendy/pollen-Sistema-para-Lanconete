@@ -18,7 +18,7 @@ const Page = () => {
         setDisabled(true);
 
         const json = await api.login(email, password);
-
+        
         if (json.error) {
             if (typeof json.error === "object") {
                 console.log(json.error);
@@ -26,6 +26,7 @@ const Page = () => {
                 else if (json.error.password) setError(json.error.password.msg);
             } else setError(json.error);
         } else {
+            console.log(email, password)
             doLogin(json.token, rememberPassword);
             window.location.href = "/principal";
         }

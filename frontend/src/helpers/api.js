@@ -53,7 +53,7 @@ const apiFetchPost = async (endpoint, body) => {
 
     if (json.notallowed) {
         doLogout();
-        window.location.href = "/signin";
+        window.location.href = "/login";
         return;
     }
 
@@ -241,6 +241,11 @@ const API = {
 
     updateComanda: async(id, body) => {
         const json = await apiFetchPut(`/comanda/update/${id}`, body);
+        return json;
+    },
+
+    addPagamento: async(id, body) => {
+        const json = await apiFetchPost(`/pagamento/${id}`, body);
         return json;
     },
 
